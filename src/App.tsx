@@ -554,7 +554,7 @@ export default function App() {
               <div className="mb-6 relative">
                 <div className="absolute -inset-4 blur-3xl bg-yellow-400/20 rounded-full" />
                 <h1 className="text-4xl font-black tracking-tighter italic text-yellow-400 drop-shadow-lg">
-                  BANANA CAT<br />CLIMB
+                  YELLOW BLOCK<br />CLIMB
                 </h1>
                 <p className="mt-2 text-zinc-300 font-medium">目標：攀爬 100 層到達終點！</p>
               </div>
