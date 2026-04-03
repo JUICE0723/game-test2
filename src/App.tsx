@@ -182,7 +182,7 @@ export default function App() {
       if (Math.random() < trapChance) type = 'trap';
       if (i === 0 && type === 'trap') type = 'normal';
 
-      const hasFlower = type === 'normal' && Math.random() < 0.10;
+      const hasFlower = type === 'normal' && Math.random() < 0.25;
       const hasJetpack = !hasFlower && Math.random() < 0.005; // 0.5% chance
 
       platforms.push({
@@ -291,7 +291,7 @@ export default function App() {
               p.flowerTriggered = true;
               setTimeout(() => {
                 p.flowerVisible = true;
-              }, 1000);
+              }, 100);
             }
           }
         }
