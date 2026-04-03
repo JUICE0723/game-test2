@@ -14,7 +14,7 @@ const GRAVITY = 0.4;
 const JUMP_FORCE = -10; // Slightly reduced for manual control
 const MOVE_SPEED = 5;
 const JETPACK_FORCE = -8;
-const JETPACK_DURATION = 6000; // 6 seconds
+const JETPACK_DURATION = 2000; // 2 seconds
 const PLATFORM_WIDTH = 80;
 const PLATFORM_HEIGHT = 15;
 const GAME_WIDTH = 400;
@@ -29,6 +29,8 @@ interface Platform {
   direction?: number;
   visible?: boolean;
   hasFlower?: boolean;
+  flowerTriggered?: boolean;
+  flowerVisible?: boolean;
   hasJetpack?: boolean;
 }
 
@@ -180,8 +182,8 @@ export default function App() {
       if (Math.random() < trapChance) type = 'trap';
       if (i === 0 && type === 'trap') type = 'normal';
 
-      const hasFlower = type === 'normal' && Math.random() < 0.15;
-      const hasJetpack = !hasFlower && Math.random() < 0.01; // 1% chance
+      const hasFlower = type === 'normal' && Math.random() < 0.10;
+      const hasJetpack = !hasFlower && Math.random() < 0.005; // 0.5% chance
 
       platforms.push({
         x: Math.random() * (GAME_WIDTH - PLATFORM_WIDTH),
@@ -246,7 +248,7 @@ export default function App() {
             player.y + PLAYER_SIZE > p.y && 
             player.y + PLAYER_SIZE < p.y + PLATFORM_HEIGHT + player.vy) {
           
-          if (p.type === 'trap' || p.hasFlower) {
+          if (p.type === 'trap' || (p.hasFlower && p.flowerVisible)) {
             sounds.playTrap();
             sounds.stopBGM();
             setGameState('gameover');
@@ -284,6 +286,13 @@ export default function App() {
             player.y = p.y - PLAYER_SIZE;
             player.isGrounded = true;
             if (p.type === 'disappearing') p.visible = false;
+            
+            if (p.hasFlower && !p.flowerTriggered) {
+              p.flowerTriggered = true;
+              setTimeout(() => {
+                p.flowerVisible = true;
+              }, 1000);
+            }
           }
         }
       });
@@ -371,7 +380,7 @@ export default function App() {
         ctx.strokeStyle = 'rgba(255,255,255,0.2)';
         ctx.stroke();
         
-        if (p.hasFlower) {
+        if (p.hasFlower && p.flowerVisible) {
           if (assets.flower) {
             ctx.drawImage(assets.flower, p.x + PLATFORM_WIDTH/2 - 15, p.y - 30, 30, 30);
           } else {
